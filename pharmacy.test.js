@@ -1,5 +1,6 @@
 import { Drug, Pharmacy } from "./pharmacy";
 import dafalganOutput from "./dafalgan-output-ref.json";
+import outputV2 from "./output-ref-v2.json";
 
 function updateForDays(pharmacy, days) {
   for (let day = 0; day < days; day += 1) {
@@ -25,7 +26,9 @@ describe("Pharmacy", () => {
   it("increases Herbal Tea without exceeding the maximum benefit", () => {
     const pharmacy = new Pharmacy([new Drug("Herbal Tea", 0, 48)]);
 
-    expect(pharmacy.updateBenefitValue()).toEqual([new Drug("Herbal Tea", -1, 50)]);
+    expect(pharmacy.updateBenefitValue()).toEqual([
+      new Drug("Herbal Tea", -1, 50),
+    ]);
   });
 
   it("degrades Dafalgan twice as fast, including after it expires", () => {
@@ -43,6 +46,23 @@ describe("Pharmacy", () => {
     }
 
     expect(result).toEqual(dafalganOutput.result);
+  });
+
+  it("matches the 30-day output fixture with Dafalgan", () => {
+    const pharmacy = new Pharmacy([
+      new Drug("Doliprane", 20, 30),
+      new Drug("Herbal Tea", 10, 5),
+      new Drug("Fervex", 12, 35),
+      new Drug("Magic Pill", 15, 40),
+      new Drug("Dafalgan", 4, 20),
+    ]);
+    const result = [];
+
+    for (let day = 0; day < 30; day += 1) {
+      result.push(JSON.parse(JSON.stringify(pharmacy.updateBenefitValue())));
+    }
+
+    expect(result).toEqual(outputV2.result);
   });
 
   it.each([
@@ -64,6 +84,8 @@ describe("Pharmacy", () => {
   it("does not update Magic Pill", () => {
     const pharmacy = new Pharmacy([new Drug("Magic Pill", 15, 40)]);
 
-    expect(updateForDays(pharmacy, 3)).toEqual([new Drug("Magic Pill", 15, 40)]);
+    expect(updateForDays(pharmacy, 3)).toEqual([
+      new Drug("Magic Pill", 15, 40),
+    ]);
   });
 });
