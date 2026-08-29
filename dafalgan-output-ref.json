@@ -1,0 +1,32 @@
+{
+  "result": [
+    [
+      {
+        "name": "Dafalgan",
+        "expiresIn": 1,
+        "benefit": 8
+      }
+    ],
+    [
+      {
+        "name": "Dafalgan",
+        "expiresIn": 0,
+        "benefit": 6
+      }
+    ],
+    [
+      {
+        "name": "Dafalgan",
+        "expiresIn": -1,
+        "benefit": 2
+      }
+    ],
+    [
+      {
+        "name": "Dafalgan",
+        "expiresIn": -2,
+        "benefit": 0
+      }
+    ]
+  ]
+}

@@ -28,6 +28,11 @@ function updateStandardDrug(drug) {
   drug.benefit = clampBenefit(drug.benefit - benefitDecrease);
 }
 
+function updateDafalgan(drug) {
+  const benefitDecrease = drug.expiresIn <= 0 ? 4 : 2;
+  drug.benefit = clampBenefit(drug.benefit - benefitDecrease);
+}
+
 function updateHerbalTea(drug) {
   const benefitIncrease = drug.expiresIn <= 0 ? 2 : 1;
   drug.benefit = clampBenefit(drug.benefit + benefitIncrease);
@@ -42,6 +47,8 @@ function updateDrug(drug) {
     updateHerbalTea(drug);
   } else if (drug.name === "Fervex") {
     updateFervex(drug);
+  } else if (drug.name === "Dafalgan") {
+    updateDafalgan(drug);
   } else {
     updateStandardDrug(drug);
   }

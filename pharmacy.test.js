@@ -1,4 +1,5 @@
 import { Drug, Pharmacy } from "./pharmacy";
+import dafalganOutput from "./dafalgan-output-ref.json";
 
 function updateForDays(pharmacy, days) {
   for (let day = 0; day < days; day += 1) {
@@ -25,6 +26,23 @@ describe("Pharmacy", () => {
     const pharmacy = new Pharmacy([new Drug("Herbal Tea", 0, 48)]);
 
     expect(pharmacy.updateBenefitValue()).toEqual([new Drug("Herbal Tea", -1, 50)]);
+  });
+
+  it("degrades Dafalgan twice as fast, including after it expires", () => {
+    const pharmacy = new Pharmacy([new Drug("Dafalgan", 1, 10)]);
+
+    expect(updateForDays(pharmacy, 2)).toEqual([new Drug("Dafalgan", -1, 4)]);
+  });
+
+  it("matches the Dafalgan output fixture over multiple days", () => {
+    const pharmacy = new Pharmacy([new Drug("Dafalgan", 2, 10)]);
+    const result = [];
+
+    for (let day = 0; day < 4; day += 1) {
+      result.push(JSON.parse(JSON.stringify(pharmacy.updateBenefitValue())));
+    }
+
+    expect(result).toEqual(dafalganOutput.result);
   });
 
   it.each([
