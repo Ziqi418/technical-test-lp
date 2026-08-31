@@ -45,3 +45,43 @@ To make sure that you will not break anything in the existing code, we added the
 ```sh
 yarn start
 ```
+
+## Implementation notes
+
+The pharmacy update logic was refactored to make each drug rule explicit and
+easier to maintain.
+
+### Supported rules
+
+- Standard drugs lose 1 Benefit per day, or 2 after expiration.
+- Herbal Tea gains 1 Benefit per day, or 2 after expiration.
+- Fervex gains 1 Benefit when more than 10 days remain, 2 when 10 days or
+  fewer remain, and 3 when 5 days or fewer remain. Its Benefit drops to 0
+  after expiration.
+- Magic Pill never changes.
+- Dafalgan loses Benefit twice as fast as a standard drug: 2 per day before
+  expiration and 4 per day after expiration.
+
+Benefit is constrained to the range from 0 to 50 in one central place.
+
+### Tests and output fixtures
+
+The test suite covers the main rules, boundary conditions, and multi-day
+updates.
+
+- `output-ref-v1.json` is the original 30-day simulation, before Dafalgan was
+  added.
+- `output-ref-v2.json` is the 30-day simulation including Dafalgan.
+- `dafalgan-output-ref.json` is a focused fixture that checks Dafalgan across
+  its expiration boundary.
+
+### Commands
+
+```sh
+yarn lint
+yarn test
+yarn start
+```
+
+`yarn start` generates `output.json`. Compare it with `output-ref-v2.json` to
+validate the current full simulation.
